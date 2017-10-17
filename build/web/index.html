@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<!--
+To change this license header, choose License Headers in Project Properties.
+To change this template file, choose Tools | Templates
+and open the template in the editor.
+-->
+<html>
+    <head>
+        <title>TODO supply a title</title>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <script language="Javascript" type="text/javascript">
+            "use strict";
+            var httpReq;
+            if(window.XMLHttpRequest){
+                httpReq = new XMLHttpRequest();
+            } else if(window.ActiveXObject){
+                httpReq = new ActiveXObject("Microsoft.XMLHTTP");
+            } else {alert("AJAX not supported.");}
+            console.log(httpReq);
+            function my$(element){
+                return document.getElementById(element);
+            }
+            
+            function LOG(text){
+                console.log(text);
+            }
+            
+            function sendRequest() {
+                var url = "mechaInfo.jsp";
+                url += "?q=" + "&%";
+                httpReq.open("GET", url);
+                httpReq.onreadystatechange = handleResponse;
+                httpReq.send(null);
+                console.log(httpReq);
+                handleResponse();
+            }
+            
+            function handleResponse(){
+                console.log("Starting handleResponse.");
+
+                if(httpReq.readyState === 4 && httpReq.status === 200){
+                    LOG("ready");
+                    var response = httpReq.responseText;
+                    response = "("+response+")";
+                    LOG("Reponse:" + response);
+                    var obj = eval(response);
+                    if(obj === null){console.log("Null value returned.");}
+                    if(obj.dbError === null){console.log("JSON string had no db property.");}
+                    if(obj.dbError.length > 0){console.log(obj.dbError);}
+                    if(obj.recordList === null){console.log("Recordlist DNE.");}
+                    if(obj.recordList.length === 0){console.log("Nothing mathched your query.");}
+                    my$("data").innerHTML = obj.recordList;
+                }
+            }
+            sendRequest();
+            handleResponse();
+        </script>
+    </head>
+    <body>
+        <div id="data"></div>
+    </body>
+</html>

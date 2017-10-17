@@ -23,7 +23,7 @@ public class StringDataList {
 
         try {
 
-            String sql = "SELECT mechaTable_ID, mechaName FROM mechaTable "
+            String sql = "SELECT mechaTable_ID, mechaName, mechaURL FROM mechaTable "
                     + "WHERE mechaName LIKE ? ORDER BY mechaTable_ID";
 
             PreparedStatement stmt = dbc.getConn().prepareStatement(sql);
@@ -35,6 +35,7 @@ public class StringDataList {
                     sd = new StringData();
                     sd.mechaTable_ID = FormatUtils.formatInteger(results.getObject("mechaTable_ID"));
                     sd.mechaDescriptor = FormatUtils.formatString(results.getObject("mechaName"));
+                    sd.mechaURL = FormatUtils.formatString(results.getObject("mechaURL"));
                     this.recordList.add(sd);
                 } catch (Exception e) {
                     sd.errorMsg = "Something's wrong " + e.getMessage();

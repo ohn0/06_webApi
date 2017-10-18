@@ -17,14 +17,19 @@
     if (list.dbError.length() == 0) { // got open connection 
 
         String mechaName = request.getParameter("q");
-        if (mechaName == null) {
+        String sortType = request.getParameter("s");
+        mechaName = mechaName.substring(0, mechaName.indexOf('_'));
+        if(sortType == null){sortType = "";}
+        
+        if (mechaName == null) { 
             mechaName = "";
         }
 
         // countryFlagList is an object with an array of country objects inside, 
         // plus a possible dbError.
         System.out.println("jsp page ready to search for mechas with " + mechaName);
-        list = new StringDataList(mechaName, dbc);
+        System.out.println("Sort type: " + sortType);  
+        list = new StringDataList(mechaName,sortType, dbc);
     } 
 
     // PREVENT DB connection leaks:

@@ -15,16 +15,18 @@ public class StringDataList {
     }
 
     // overloaded constructor populates the list (and possibly the dbError)
-    public StringDataList(String mechaNameStartsWith, DbConn dbc) {
+    public StringDataList(String mechaNameStartsWith, String sortQueryBy, DbConn dbc) {
 
         StringData sd = new StringData();
-
+        if(sortQueryBy == null || sortQueryBy.equals("")){
+            sortQueryBy = "mechaName";
+        }
         System.out.println("Searching for mecha that start with " + mechaNameStartsWith);
-
         try {
 
-            String sql = "SELECT mechaTable_ID, mechaName, mechaURL FROM mechaTable "
-                    + "WHERE mechaName LIKE ? ORDER BY mechaTable_ID";
+            String sql = "SELECT mechaTable_ID, mechaName, mechaURL, mechaHeight,"
+                    + " mechaDescriptor FROM mechaTable WHERE mechaName LIKE ? ORDER "
+                    + "BY " + sortQueryBy;
 
             PreparedStatement stmt = dbc.getConn().prepareStatement(sql);
             stmt.setString(1, mechaNameStartsWith + "%");

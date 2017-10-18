@@ -6,6 +6,20 @@ and open the template in the editor.
 -->
 <html>
     <head>
+        <style>
+            #mechaTable{
+                border: 1px solid black;
+            }
+            
+            th, td {
+                border: 1px solid black;
+            }
+            
+            div{
+                margin: auto;
+                width: 70%;
+            }
+        </style>
         <title>mechaDB</title>
         <meta charset="UTF-8">
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -27,7 +41,10 @@ and open the template in the editor.
             
             function sendRequest() {
                 var url = "mechaInfo.jsp";
-                url += "?q=" + my$("nameBox").value;
+                var sortType = my$("sortOptions").options[my$("sortOptions").
+                        selectedIndex].value;
+                LOG(sortType);
+                url += "?q=" + my$("nameBox").value + "_?s=" + sortType;
                 httpReq.open("GET", url);
                 httpReq.onreadystatechange = handleResponse;
                 httpReq.send(null);
@@ -54,13 +71,14 @@ and open the template in the editor.
                             var mechaName = document.createElement("td");
                             var mechaIMG = document.createElement("td");
                             var mechaIMGContainer = document.createElement("img");
-                            mechaIMGContainer.style.width = "100%";
-                            mechaIMGContainer.style.height = "100%";
                             mechaIMGContainer.src = obj.recordList[i].mechaURL;
                             mechaRow.appendChild(mechaName);
                             mechaIMG.appendChild(mechaIMGContainer);
                             mechaRow.appendChild(mechaIMG);
                             imageTable.appendChild(mechaRow);
+                            mechaIMGContainer.style.width = "250px";
+                            mechaIMGContainer.style.height = "50%";
+
                             mechaName.innerHTML = obj.recordList[i].mechaDescriptor;
                         }
                     }
@@ -71,7 +89,14 @@ and open the template in the editor.
     </head>
     <body>
         <input type="text" id="nameBox" value="" size="30" />
-        <input type="button" value="Search mecha name" onClick="javascript:sendRequest()"/>
+        <input type="button" value="Search mecha name" onClick="javascript:sendRequest()"/><br/>
+        <span>Choose sort type:</span>
+        <select id="sortOptions">
+            <option value="mechaDescriptor">mechaDescriptor</option>
+            <option value="mechaName">      mechaName</option>
+            <option value="mechaHeight">    mechaHeight</option>
+            <option value="mechaTable_ID">  mechaTable_ID</option>
+        </select>
         <div id="data"></div>
         <table id="mechaTable">
         </table>

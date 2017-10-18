@@ -6,5 +6,7 @@ public class StringData {
     public String mechaTable_ID = "";
     public String mechaDescriptor = "";
     public String mechaURL = "";
+    public String mechaName = "";
+    public String mechaHeight = "";
     public String errorMsg = "";
 }

@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<!--
+To change this license header, choose License Headers in Project Properties.
+To change this template file, choose Tools | Templates
+and open the template in the editor.
+-->
+<html>
+    <head>
+        <style>
+            #mechaTable{
+                border: 1px solid black;
+            }
+            
+            th, td {
+                border: 1px solid black;
+            }
+            
+            div{
+                margin: auto;
+                width: 70%;
+            }
+            
+            img{
+                width: 250px;
+                height: 50%;
+            }
+            
+        </style>
+        <title>mechaDB jQ</title>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.10.2/jquery.min.js"></script>
+        <script language="Javascript" type="text/javascript">
+            function LOG(text){
+                console.log(text);
+            }
+            $(document).ready(function()
+            {
+                $("#mechaTable").append("");
+                $('#getButton').click(function(){
+                    var url = "mechaInfo.jsp";
+                    url += "?q=" + $("#nameBox").val();
+                    LOG(url);
+                    ajaxSuccess = function (response){
+                        LOG("Success");
+                        var obj = eval(response);
+                        for(var i = 0; i < obj.recordList.length; i++){
+                            LOG(obj.recordList[i]);
+                            $("#mechaTable").append(
+                                "<tr><td>"+obj.recordList[i].mechaName+"</td><td><img" +
+                                " src="+obj.recordList[i].mechaURL+"</img></td></tr>"
+                            );
+                        }
+                    };
+                    
+                    ajaxFailure = function(){
+                        alert("Problem encountered.");
+                    };
+                    $.ajax(
+                        {
+                            type:"GET",
+                            cache: false,
+                            url: url,
+                            dataType: "json",
+                            timeout: 500,
+                            success: ajaxSuccess,
+                            error: ajaxFailure
+                        });
+                });
+            });
+
+        </script>
+    </head>
+    <body>
+        <input type="text" id="nameBox" value="" size="30" />
+        <input type="button" value="Search mecha name" id="getButton"/><br/>
+        <div id="data"></div>
+        <table id="mechaTable">
+        </table>
+    </body>
+</html>

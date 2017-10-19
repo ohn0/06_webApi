@@ -15,18 +15,15 @@ public class StringDataList {
     }
 
     // overloaded constructor populates the list (and possibly the dbError)
-    public StringDataList(String mechaNameStartsWith, String sortQueryBy, DbConn dbc) {
+    public StringDataList(String mechaNameStartsWith, DbConn dbc) {
 
         StringData sd = new StringData();
-        if(sortQueryBy == null || sortQueryBy.equals("")){
-            sortQueryBy = "mechaName";
-        }
         System.out.println("Searching for mecha that start with " + mechaNameStartsWith);
         try {
 
             String sql = "SELECT mechaTable_ID, mechaName, mechaURL, mechaHeight,"
                     + " mechaDescriptor FROM mechaTable WHERE mechaName LIKE ? ORDER "
-                    + "BY " + sortQueryBy;
+                    + "BY mechaName";
 
             PreparedStatement stmt = dbc.getConn().prepareStatement(sql);
             stmt.setString(1, mechaNameStartsWith + "%");
@@ -36,8 +33,10 @@ public class StringDataList {
                 try {
                     sd = new StringData();
                     sd.mechaTable_ID = FormatUtils.formatInteger(results.getObject("mechaTable_ID"));
-                    sd.mechaDescriptor = FormatUtils.formatString(results.getObject("mechaName"));
+                    sd.mechaDescriptor = FormatUtils.formatString(results.getObject("mechaDescriptor"));
                     sd.mechaURL = FormatUtils.formatString(results.getObject("mechaURL"));
+                    sd.mechaName = FormatUtils.formatString(results.getObject("mechaName"));
+                    sd.mechaHeight = FormatUtils.formatInteger(results.getObject("mechaHeight"));
                     this.recordList.add(sd);
                 } catch (Exception e) {
                     sd.errorMsg = "Something's wrong " + e.getMessage();

@@ -7,17 +7,29 @@ and open the template in the editor.
 <html>
     <head>
         <style>
+            body{
+                background-color: #ADD8E6;
+            }
             #mechaTable{
-                border: 1px solid black;
+                /*border: 1px solid black;*/
             }
             
-            th, td {
+            table, th, td {
                 border: 1px solid black;
+                margin:auto;
+                width: 50%;
             }
             
-            div{
+            #data{
+                text-align: center;
                 margin: auto;
                 width: 70%;
+            }
+            
+            #inputDIV{
+                text-align: center;
+                margin: auto;
+                width: 50%;
             }
             
             img{
@@ -36,21 +48,28 @@ and open the template in the editor.
             }
             $(document).ready(function()
             {
-                $("#mechaTable").append("");
                 $('#getButton').click(function(){
+                    $("#data").empty();
                     var url = "mechaInfo.jsp";
                     url += "?q=" + $("#nameBox").val();
                     LOG(url);
                     ajaxSuccess = function (response){
                         LOG("Success");
                         var obj = eval(response);
-                        for(var i = 0; i < obj.recordList.length; i++){
-                            LOG(obj.recordList[i]);
-                            $("#mechaTable").append(
-                                "<tr><td>"+obj.recordList[i].mechaName+"</td><td><img" +
-                                " src="+obj.recordList[i].mechaURL+"</img></td></tr>"
-                            );
+                        var tableString = "<table>";
+                        if(obj.recordList.length === 0){
+                            tableString = "Your query did not match any names.";
                         }
+                        else{
+                            for(var i = 0; i < obj.recordList.length; i++){
+                                LOG(obj.recordList[i]);
+                                tableString += "<tr><td>"+obj.recordList[i].mechaName+"</td><td><img" +
+                                " src="+obj.recordList[i].mechaURL+"</img></td></tr>";
+                            }
+                            tableString += "</table>";
+                            LOG("Table tags:" + tableString);
+                        }
+                        $("#data").append(tableString);                            
                     };
                     
                     ajaxFailure = function(){
@@ -72,10 +91,12 @@ and open the template in the editor.
         </script>
     </head>
     <body>
+        <div id="inputDIV">Enter mecha name to start searching:
         <input type="text" id="nameBox" value="" size="30" />
         <input type="button" value="Search mecha name" id="getButton"/><br/>
-        <div id="data"></div>
-        <table id="mechaTable">
-        </table>
+        </div>
+        <div id="data">
+            <!--<table id="mechaTable"><tbody></tbody></table>-->
+        </div>
     </body>
 </html>

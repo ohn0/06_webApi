@@ -21,6 +21,11 @@ public class StringDataList {
         System.out.println("Searching for mecha that start with " + mechaNameStartsWith);
         try {
 
+            //I had to add the 'searchBy' string through concatenation instead
+            //of using the setString method used for mechaNameStartsWith.
+            //I tried using the setString method but it would insert the 'searchBy'
+            //string enclosed with single quotes, messing up the query.
+            //
             String sql = "SELECT mechaTable_ID, mechaName, mechaURL, mechaHeight,"
                     + " mechaDescriptor FROM mechaTable WHERE "+ searchBy + " LIKE ? ORDER "
                     + "BY mechaName";
@@ -31,6 +36,9 @@ public class StringDataList {
             System.out.println(stmt.toString());
             while (results.next()) {
                 try {
+                    //Gets all the query information and stores it into 'sd', then
+                    //adds sd to the recordList, which is what will be returned to
+                    //the HTML page for the user.
                     sd = new StringData();
                     sd.mechaTable_ID = FormatUtils.formatInteger(results.getObject("mechaTable_ID"));
                     sd.mechaDescriptor = FormatUtils.formatString(results.getObject("mechaDescriptor"));

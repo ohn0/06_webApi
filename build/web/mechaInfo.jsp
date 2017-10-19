@@ -17,6 +17,7 @@
     if (list.dbError.length() == 0) { // got open connection 
 
         String mechaName = request.getParameter("q");
+        //Gets the 's' parameter, which is what field the user wants to search.
         String searchBy = request.getParameter("s");
         System.out.println("Searching by:" + searchBy);
         if (mechaName == null) { 

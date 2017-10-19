@@ -4,14 +4,14 @@ body{
 
 table, th, td {
     text-align: center;
+    border-collapse: collapse;
     border: 1px solid black;
     margin:auto;
     width: 50%;
+    background-color: white;    
+
 }
 
-th {
-    /*padding-top: 10px;*/
-}
 
 #data{
     text-align: center;

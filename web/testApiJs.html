@@ -81,7 +81,8 @@ and open the template in the editor.
                     if(obj.recordList.length === 0){
                         my$("data").innerHTML = "Your query did not match any names.";
                     }else{
-                        //Creating the table here
+                        //Begin building the table, adding values into it
+                        //as well.
                         imageTable.appendChild(document.createElement("th")).
                                 innerHTML = "Mecha Name";
                         imageTable.appendChild(document.createElement("th")).
@@ -107,6 +108,7 @@ and open the template in the editor.
                                     src = obj.recordList[i].mechaURL;
                             imageTable.appendChild(mechaRow);
                         }
+                        //Table construction complete.
                         my$("data").appendChild(imageTable);
                     }
                 }

@@ -10,9 +10,6 @@ and open the template in the editor.
             body{
                 background-color: #ADD8E6;
             }
-            #mechaTable{
-                /*border: 1px solid black;*/
-            }
             
             table, th, td {
                 border: 1px solid black;
@@ -79,7 +76,7 @@ and open the template in the editor.
                                 tableString += "<tr>"+buildTableString(obj.recordList[i])+"</tr>";
                             }
                             tableString += "</table>";
-                            LOG("Table tags:" + tableString);
+                            LOG("Table tag:" + tableString);
                         }
                         $("#data").append(tableString);                            
                     };

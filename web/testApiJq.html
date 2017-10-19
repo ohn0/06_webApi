@@ -12,10 +12,14 @@ and open the template in the editor.
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
         <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.10.2/jquery.min.js"></script>
         <script language="Javascript" type="text/javascript">
+            //This beats typing console.log everytime.
             function LOG(text){
                 console.log(text);
             }
             
+            //Given a record object, adds all the information of that object
+            //into the current table row. The row must be opened and closed
+            //outside of this function.
             function buildTableString(mRecord){
                 return "<td>"+mRecord.mechaName+"</td>"+
                        "<td>"+mRecord.mechaDescriptor+"</td>"+
@@ -23,8 +27,13 @@ and open the template in the editor.
                        "<td>"+mRecord.mechaHeight+"</td>"+
                        "<td><img src="+mRecord.mechaURL+"></img></td>";
             }
+            
+            
             $(document).ready(function()
             {
+                //When the user selects a new option from the search type list
+                //this function will change the search text and search button's
+                //values to match the selected option.
                 $('#searchBy').change(function() {
                     LOG("function called");
                     $('#searchText').text("Enter " + $('#searchBy option:selected').text() +
@@ -33,10 +42,21 @@ and open the template in the editor.
                 });
                 
                 $('#getButton').click(function(){
+                    
+                    //Empties te 'data' div, removing the previous table/message.
                     $("#data").empty();
+                    
+                    //Builds the database URL, appending the user's search term and
+                    //how what column they want to search for in the database.
                     var url = "mechaInfo.jsp";
                     url += "?q=" + $("#nameBox").val() + "&s=" + $('#searchBy').val();
                     LOG(url);
+                    
+                    //Fires when the ajax call succeeds.
+                    //The response object contains the information from the database
+                    //the user requested. Eval'ing it turns it into a workable 
+                    //object.
+                    //Also constructs the HTML table and gives it to the 'data' div.
                     ajaxSuccess = function (response){
                         LOG("Success");
                         var obj = eval(response);
@@ -45,6 +65,7 @@ and open the template in the editor.
                             $("#data").append("Your query did not match any names.");
                         }
                         else{
+                            //Table construction
                             tableString +="<th>Mecha Name</th>"+
                                           "<th>Mecha Descriptor</th>"+
                                           "<th>Mecha Table ID</th>"+
@@ -55,12 +76,15 @@ and open the template in the editor.
                                 tableString += "<tr>"+buildTableString(obj.recordList[i])+"</tr>";
                             }
                             tableString += "</table>";
+                            //Done constructing table
                             LOG("Table tag:" + tableString);
                             $("#data").append(tableString);                            
 
                         }
                     };
                     
+                    //Fires when ajax call fails. textStatus is printed out
+                    //to notify the user what went wrong.
                     ajaxFailure = function(jqXHR, textStatus){
                         alert("Problem encountered: " + textStatus);
                     };
@@ -70,7 +94,9 @@ and open the template in the editor.
                             cache: false,
                             url: url,
                             dataType: "json",
-                            timeout: 10000,
+                            //Made the timeout really high because the first query
+                            //takes MUCH more time than any subsequent query.
+                            timeout: 10000, 
                             success: ajaxSuccess,
                             error: ajaxFailure
                         });

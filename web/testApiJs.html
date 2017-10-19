@@ -1,0 +1,131 @@
+<!DOCTYPE html>
+<!--
+To change this license header, choose License Headers in Project Properties.
+To change this template file, choose Tools | Templates
+and open the template in the editor.
+-->
+<html>
+    <head>
+        <link rel="stylesheet" type="text/css" href="apiCSS.css">
+        <title>web API Javascript</title>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <script language="Javascript" type="text/javascript">
+            "use strict";
+            
+            //Creates a HTTP request object that will be used to connect to the
+            //database and query it later.
+            var httpReq;
+            if(window.XMLHttpRequest){
+                httpReq = new XMLHttpRequest();
+            } else if(window.ActiveXObject){
+                httpReq = new ActiveXObject("Microsoft.XMLHTTP");
+            } else {alert("AJAX not supported.");}
+            
+            function my$(element){
+                return document.getElementById(element);
+            }
+            
+            //Beats typing console.log everytime.
+            function LOG(text){
+                console.log(text);
+            }
+            
+            //Gets the jsp page and prepares the URL that will contain the
+            //query the user wants to make. The URL will also append what the
+            //user is searching for(name, id, etc.)
+            //Once the URL is built, a connection is made to it.
+            //
+            function sendRequest() {
+                var url = "mechaInfo.jsp";
+                url += "?q=" + my$("nameBox").value + "&s=" + my$("searchBy").
+                        options[my$("searchBy").selectedIndex].value;
+                LOG(url);
+                httpReq.open("GET", url);
+                httpReq.onreadystatechange = handleResponse;
+                httpReq.send(null);
+                handleResponse();
+            }
+            
+            //When the user selects a new search type, update the search text
+            //and button.
+            function updateTerms(){
+                my$("searchText").innerHTML = "Enter " + my$("searchBy").options
+                    [my$("searchBy").selectedIndex].text + " to start searching:";
+                my$("searchButton").value = "Search " + my$("searchBy").options
+                    [my$("searchBy").selectedIndex].text;
+            }
+            
+            //All the values returned from the database are obtained and eval'd.
+            //This will create the javascript object that contains all the keys
+            //and values.
+            //If the user's query was invalid, a message is returned to the user.
+            //The created object will then be used to construct the HTML table 
+            //by iterating through each sub-object and creating a new row for that
+            //objected in the table. Each row will then get all the elements from the
+            //objects added into it.
+            //The created table is appended to the 'Data' div at the end.
+            //
+            function handleResponse(){
+                var imageTable = document.createElement("table");
+                my$("data").innerHTML = "";
+                if(httpReq.readyState === 4 && httpReq.status === 200){
+                    LOG("ready");
+                    var response = httpReq.responseText;
+                    response = "("+response+")";
+                    var obj = eval(response);
+                    if(obj === null){console.log("Null value returned.");}
+                    if(obj.dbError === null){console.log("JSON string had no db property.");}
+                    if(obj.dbError.length > 0){console.log(obj.dbError);}
+                    if(obj.recordList === null){console.log("Recordlist DNE.");}
+                    if(obj.recordList.length === 0){
+                        my$("data").innerHTML = "Your query did not match any names.";
+                    }else{
+                        //Creating the table here
+                        imageTable.appendChild(document.createElement("th")).
+                                innerHTML = "Mecha Name";
+                        imageTable.appendChild(document.createElement("th")).
+                                innerHTML = "Mecha Descriptor";
+                        imageTable.appendChild(document.createElement("th")).
+                                innerHTML = "Mecha Table ID";
+                        imageTable.appendChild(document.createElement("th")).
+                                innerHTML = "Mecha Height";
+                        imageTable.appendChild(document.createElement("th")).
+                                innerHTML = "Mecha Image";
+                        for(var i = 0; i < obj.recordList.length; i++){
+                            var mechaRow = document.createElement("tr");
+                            mechaRow.appendChild(document.createElement("td")).
+                                    innerHTML = obj.recordList[i].mechaName;
+                            mechaRow.appendChild(document.createElement("td")).
+                                    innerHTML = obj.recordList[i].mechaDescriptor;
+                            mechaRow.appendChild(document.createElement("td")).
+                                    innerHTML = obj.recordList[i].mechaTable_ID;
+                            mechaRow.appendChild(document.createElement("td")).
+                                    innerHTML = obj.recordList[i].mechaHeight;
+                            mechaRow.appendChild(document.createElement("td").
+                                    appendChild(document.createElement("img"))).
+                                    src = obj.recordList[i].mechaURL;
+                            imageTable.appendChild(mechaRow);
+                        }
+                        my$("data").appendChild(imageTable);
+                    }
+                }
+            }
+        </script>
+    </head>
+    <body>
+        <div id="inputDIV"><span id="searchText">Enter mecha name to start searching:</span>
+        <input type="text" id="nameBox" value="" size="30" /><br/>
+        Search by:
+        <select id="searchBy" onchange="updateTerms()">
+            <option value="mechaName">Mecha Name</option>
+            <option value="mechaDescriptor">Mecha Descriptor</option>
+            <option value="mechaTable_ID">Mecha ID</option>
+            <option value="mechaHeight">Mecha Height</option>
+        </select> <br/>
+        <input type="button" id="searchButton" value="Search mecha name" 
+               onClick="javascript:sendRequest()"/><br/>
+        </div>
+        <div id="data"></div>
+    </body>
+</html>

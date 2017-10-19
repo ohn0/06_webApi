@@ -22,12 +22,11 @@ public class StringDataList {
         try {
 
             String sql = "SELECT mechaTable_ID, mechaName, mechaURL, mechaHeight,"
-                    + " mechaDescriptor FROM mechaTable WHERE ? LIKE ? ORDER "
+                    + " mechaDescriptor FROM mechaTable WHERE "+ searchBy + " LIKE ? ORDER "
                     + "BY mechaName";
 
             PreparedStatement stmt = dbc.getConn().prepareStatement(sql);
-            stmt.setString(1, searchBy);
-            stmt.setString(2, mechaNameStartsWith + "%");
+            stmt.setString(1, mechaNameStartsWith + "%");
             ResultSet results = stmt.executeQuery();
             System.out.println(stmt.toString());
             while (results.next()) {

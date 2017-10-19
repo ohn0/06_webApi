@@ -6,35 +6,7 @@ and open the template in the editor.
 -->
 <html>
     <head>
-        <style>
-            body{
-                background-color: #ADD8E6;
-            }
-            
-            table, th, td {
-                border: 1px solid black;
-                margin:auto;
-                width: 50%;
-            }
-            
-            #data{
-                text-align: center;
-                margin: auto;
-                width: 70%;
-            }
-            
-            #inputDIV{
-                text-align: center;
-                margin: auto;
-                width: 50%;
-            }
-            
-            img{
-                width: 250px;
-                height: 50%;
-            }
-            
-        </style>
+        <link rel="stylesheet" type="text/css" href="apiCSS.css">
         <title>mechaDB jQ</title>
         <meta charset="UTF-8">
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -54,7 +26,7 @@ and open the template in the editor.
             $(document).ready(function()
             {
                 $('#getButton').click(function(){
-                    $("#data").empty();
+                    $("#data > table > tr").empty();
                     var url = "mechaInfo.jsp";
                     url += "?q=" + $("#nameBox").val();
                     LOG(url);
@@ -104,8 +76,6 @@ and open the template in the editor.
         <input type="text" id="nameBox" value="" size="30" />
         <input type="button" value="Search mecha name" id="getButton"/><br/>
         </div>
-        <div id="data">
-            <!--<table id="mechaTable"><tbody></tbody></table>-->
-        </div>
+        <div id="data"></div>
     </body>
 </html>

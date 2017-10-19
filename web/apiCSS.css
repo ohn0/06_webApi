@@ -1,0 +1,26 @@
+body{
+    background-color: #ADD8E6;
+}
+
+table, th, td {
+    border: 1px solid black;
+    margin:auto;
+    width: 50%;
+}
+
+#data{
+    text-align: center;
+    margin: auto;
+    width: 70%;
+}
+
+#inputDIV{
+    text-align: center;
+    margin: auto;
+    width: 50%;
+}
+
+img{
+    width: 250px;
+    height: 50%;
+}

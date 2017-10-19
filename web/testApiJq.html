@@ -46,6 +46,14 @@ and open the template in the editor.
             function LOG(text){
                 console.log(text);
             }
+            
+            function buildTableString(mRecord){
+                return "<td>"+mRecord.mechaName+"</td>"+
+                       "<td>"+mRecord.mechaDescriptor+"</td>"+
+                       "<td>"+mRecord.mechaTable_ID+"</td>"+
+                       "<td>"+mRecord.mechaHeight+"</td>"+
+                       "<td><img src="+mRecord.mechaURL+"></img></td>";
+            }
             $(document).ready(function()
             {
                 $('#getButton').click(function(){
@@ -61,10 +69,14 @@ and open the template in the editor.
                             tableString = "Your query did not match any names.";
                         }
                         else{
+                            tableString +="<th>Mecha Name</th>"+
+                                          "<th>Mecha Descriptor</th>"+
+                                          "<th>Mecha Table ID</th>"+
+                                          "<th>Mecha Height</th>"+
+                                          "<th>Mecha Image</th>";
                             for(var i = 0; i < obj.recordList.length; i++){
                                 LOG(obj.recordList[i]);
-                                tableString += "<tr><td>"+obj.recordList[i].mechaName+"</td><td><img" +
-                                " src="+obj.recordList[i].mechaURL+"</img></td></tr>";
+                                tableString += "<tr>"+buildTableString(obj.recordList[i])+"</tr>";
                             }
                             tableString += "</table>";
                             LOG("Table tags:" + tableString);
@@ -72,8 +84,8 @@ and open the template in the editor.
                         $("#data").append(tableString);                            
                     };
                     
-                    ajaxFailure = function(){
-                        alert("Problem encountered.");
+                    ajaxFailure = function(jqXHR, textStatus){
+                        alert("Problem encountered: " + textStatus);
                     };
                     $.ajax(
                         {
@@ -81,7 +93,7 @@ and open the template in the editor.
                             cache: false,
                             url: url,
                             dataType: "json",
-                            timeout: 500,
+                            timeout: 5000,
                             success: ajaxSuccess,
                             error: ajaxFailure
                         });

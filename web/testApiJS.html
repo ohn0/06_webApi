@@ -7,7 +7,7 @@ and open the template in the editor.
 <html>
     <head>
         <link rel="stylesheet" type="text/css" href="apiCSS.css">
-        <title>mechaDB</title>
+        <title>web API Javascript</title>
         <meta charset="UTF-8">
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
         <script language="Javascript" type="text/javascript">
@@ -28,7 +28,8 @@ and open the template in the editor.
             
             function sendRequest() {
                 var url = "mechaInfo.jsp";
-                url += "?q=" + my$("nameBox").value;
+                url += "?q=" + my$("nameBox").value + "&s=" + "mechaHeight";
+                LOG(url);
                 httpReq.open("GET", url);
                 httpReq.onreadystatechange = handleResponse;
                 httpReq.send(null);
@@ -36,11 +37,10 @@ and open the template in the editor.
             }
             
             function handleResponse(){
-                var imageTable = my$("mechaTable");
-                imageTable.innerHTML = "";
+                var imageTable = document.createElement("table");
+                my$("data").innerHTML = "";
                 if(httpReq.readyState === 4 && httpReq.status === 200){
                     LOG("ready");
-                    var outputText = "";
                     var response = httpReq.responseText;
                     response = "("+response+")";
                     var obj = eval(response);
@@ -49,7 +49,7 @@ and open the template in the editor.
                     if(obj.dbError.length > 0){console.log(obj.dbError);}
                     if(obj.recordList === null){console.log("Recordlist DNE.");}
                     if(obj.recordList.length === 0){
-                        imageTable.innerHTML = "Your query did not match any names.";
+                        my$("data").innerHTML = "Your query did not match any names.";
                     }else{
                         imageTable.appendChild(document.createElement("th")).
                                 innerHTML = "Mecha Name";
@@ -76,6 +76,7 @@ and open the template in the editor.
                                     src = obj.recordList[i].mechaURL;
                             imageTable.appendChild(mechaRow);
                         }
+                        my$("data").appendChild(imageTable);
                     }
                 }
             }
@@ -86,8 +87,6 @@ and open the template in the editor.
         <input type="text" id="nameBox" value="" size="30" />
         <input type="button" value="Search mecha name" onClick="javascript:sendRequest()"/><br/>
         </div>
-        <div id="data">
-            <table id="mechaTable"></table>
-        </div>
+        <div id="data"></div>
     </body>
 </html>

@@ -17,12 +17,14 @@
     if (list.dbError.length() == 0) { // got open connection 
 
         String mechaName = request.getParameter("q");
+        String searchBy = request.getParameter("s");
+        System.out.println("Searching by:" + searchBy);
         if (mechaName == null) { 
             mechaName = "";
         }
 
         System.out.println("jsp page ready to search for mechas with " + mechaName);
-        list = new StringDataList(mechaName, dbc);
+        list = new StringDataList(mechaName,searchBy, dbc);
     } 
 
     // PREVENT DB connection leaks:

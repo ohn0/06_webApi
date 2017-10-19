@@ -3,9 +3,14 @@ body{
 }
 
 table, th, td {
+    text-align: center;
     border: 1px solid black;
     margin:auto;
     width: 50%;
+}
+
+th {
+    /*padding-top: 10px;*/
 }
 
 #data{

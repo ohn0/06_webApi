@@ -7,7 +7,7 @@ and open the template in the editor.
 <html>
     <head>
         <link rel="stylesheet" type="text/css" href="apiCSS.css">
-        <title>mechaDB jQ</title>
+        <title>web API JQuery</title>
         <meta charset="UTF-8">
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
         <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.10.2/jquery.min.js"></script>
@@ -28,14 +28,15 @@ and open the template in the editor.
                 $('#getButton').click(function(){
                     $("#data > table > tr").empty();
                     var url = "mechaInfo.jsp";
-                    url += "?q=" + $("#nameBox").val();
+                    url += "?q=" + $("#nameBox").val() + "&s=" + "mechaHeight";
                     LOG(url);
                     ajaxSuccess = function (response){
                         LOG("Success");
                         var obj = eval(response);
                         var tableString = "<table>";
                         if(obj.recordList.length === 0){
-                            tableString = "Your query did not match any names.";
+                            $("#data").empty();
+                            $("#data").append("Your query did not match any names.");
                         }
                         else{
                             tableString +="<th>Mecha Name</th>"+
@@ -49,8 +50,9 @@ and open the template in the editor.
                             }
                             tableString += "</table>";
                             LOG("Table tag:" + tableString);
+                            $("#data").append(tableString);                            
+
                         }
-                        $("#data").append(tableString);                            
                     };
                     
                     ajaxFailure = function(jqXHR, textStatus){

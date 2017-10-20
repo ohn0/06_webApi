@@ -62,7 +62,7 @@ and open the template in the editor.
                         var obj = eval(response);
                         var tableString = "<table>";
                         if(obj.recordList.length === 0){
-                            $("#data").append("Your query did not match any names.");
+                            $("#data").append("I got nothing :(");
                         }
                         else{
                             //Table construction
@@ -106,6 +106,18 @@ and open the template in the editor.
         </script>
     </head>
     <body>
+        <div style="margin:auto; width:70%; text-align:center">
+            <h3>testApi JQuery</h3>
+            This is the Jquery version of the web API.<br/>Test this page by 
+            entering some value in the text box to search the database. You can
+            also choose which column of the database you want to search(Name, ID,
+            Descriptor, and Height). If the database finds something matching
+            your query, it will display the results in a table alphabetically 
+            based on the value's name field. If you want to see all the entries
+            in the database, select 'Mecha Descriptor' from the selection menu 
+            and search for 'm'. If you want to see only one entry, choose 'Mecha
+            name' from the selection menu and search for either 'c' or 'n'.
+        </div><br/><br/>
         <div id="inputDIV"><span id="searchText">Enter mecha name to start searching:</span>
         <input type="text" id="nameBox" value="" size="30" /><br/>
         Search by:

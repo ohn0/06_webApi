@@ -18,6 +18,8 @@
 
         String mechaName = request.getParameter("q");
         //Gets the 's' parameter, which is what field the user wants to search.
+        //If you are testing the jsp page on it's own, if you want to see any of
+        //the results, you will need to add both '?q=' and '&s=' to the URL.
         String searchBy = request.getParameter("s");
         System.out.println("Searching by:" + searchBy);
         if (mechaName == null) { 
